@@ -1,11 +1,13 @@
+# PySpark Transaction Similarity Join
+
 This project implements a **similarity join** over e-commerce transaction logs using **Jaccard similarity** and **prefix filtering** in **PySpark**.  
 The goal is to find all transaction pairs with similarity ≥ τ (tau).
 
 ## Features
-- Transaction = set of purchased items
-- **Cross-year pairs only**; pairs are unique with `id1 < id2`
-- Output format: `(InvoiceNo1,InvoiceNo2):similarity`, sorted by IDs
-- Scales to large datasets using Spark DataFrame APIs and UDFs
+- Transaction = set of purchased items  
+- **Cross-year pairs only**; pairs are unique with `id1 < id2`  
+- Output format: `(InvoiceNo1,InvoiceNo2):similarity`, sorted by IDs  
+- Scales to large datasets using Spark DataFrame APIs and UDFs  
 
 ## Project Structure
 ```
