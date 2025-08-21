@@ -32,14 +32,15 @@ pip install -r requirements.txt
 Open notebook/LLaVA_notebook.ipynb in JupyterLab / Colab to try fine-tuning on a small sample.
 
 ### 3) Multi-GPU training with DDP
+```bash
 torchrun --nproc_per_node=4 scripts/DDP.py
-
+```
 Adjust --nproc_per_node based on your available GPUs.
 (Training hyperparameters are defined directly inside DDP.py for simplicity — no extra config file required.)
 ## 4) Inference
 
 After training, load the adapter and run:
-```
+```python
 from transformers import AutoModelForCausalLM, AutoProcessor
 from PIL import Image
 
