@@ -1,36 +1,64 @@
-# LLaVA Distributed Fine-tuning with LoRA
+# LLaVA Fine-Tuning Prototype
 
-This project demonstrates **multi-GPU fine-tuning of LLaVA-1.5-7B** using:
+This project demonstrates **fine-tuning LLaVA (Large Language and Vision Assistant)** using **LoRA/QLoRA** techniques on instruction-following datasets (e.g., LLaVA-Instruct-Mix).  
+It includes both a Jupyter Notebook for step-by-step exploration and a distributed training script (`DDP.py`) for multi-GPU setups.
 
-- PyTorch **DistributedDataParallel (DDP)**
-- **LoRA** (parameter-efficient fine-tuning)
-- **BitsAndBytes 4-bit quantization**
-- Hugging Face **Transformers** + **TRL**
+## Features
+- **Notebook demo**: single-GPU fine-tuning with LoRA/QLoRA, data preprocessing, and inference examples.  
+- **Distributed script (DDP.py)**: PyTorch Distributed Data Parallel (DDP) for scalable multi-GPU training.  
+- **Data pipeline**: custom collator for aligning image-text pairs into LLaVA’s input format.  
+- **Parameter-efficient training**: 4-bit quantization + LoRA for reduced memory footprint.  
+- **Evaluation**: simple inference examples and hooks for VQA-style assessment.
 
-> ⚠️ Note: This repo is shared as a **coursework-style Python project**.  
-> It may require a specific CUDA/NCCL setup. Even if it cannot be run directly,  
-> the code shows how to structure distributed training with custom collators.
+## Project Structure
+notebook/
+└─ LLaVA_notebook.ipynb # Step-by-step prototype fine-tuning
+scripts/
+└─ DDP.py # Distributed multi-GPU fine-tuning script
+data/
+└─ samples/ # Placeholder for images/annotations
+outputs/ # Checkpoints and logs (not included in repo)
 
----
 
 ## Quick Start
 
+### 1) Install dependencies
 ```bash
 pip install -r requirements.txt
+2) Run the notebook
 
-# Example paths (replace with your own)
-MODEL_ID="liuhaotian/llava-v1.5-7b"
-TRAIN_DATA="./data/train"   # HuggingFace datasets 'load_from_disk' folder
-EVAL_DATA="./data/eval"
+Open notebook/LLaVA_notebook.ipynb in JupyterLab / Colab to try fine-tuning on a small sample.
 
-python -m torch.distributed.run --nproc_per_node=1 train_llava_distributed.py \
-  --model_id "$MODEL_ID" \
-  --train_dataset_path "$TRAIN_DATA" \
-  --eval_dataset_path "$EVAL_DATA" \
-  --output_dir "./output" \
-  --tensorboard_log_dir "./runs" \
-  --lr 1.4e-5 \
-  --epochs 1 \
-  --per_device_train_batch_size 8 \
-  --grad_accum 2
+3) Multi-GPU training with DDP
+torchrun --nproc_per_node=4 scripts/DDP.py --config configs/train_lora.yaml
+Adjust --nproc_per_node based on your available GPUs.
+
+4) Inference
+
+After training, load the adapter and run:
+from transformers import AutoModelForCausalLM, AutoProcessor
+from PIL import Image
+
+model = AutoModelForCausalLM.from_pretrained("outputs/checkpoints/last", device_map="auto")
+processor = AutoProcessor.from_pretrained("outputs/checkpoints/last")
+
+image = Image.open("data/samples/placeholder.jpg").convert("RGB")
+inputs = processor(text="Describe the image briefly.", images=image, return_tensors="pt").to("cuda")
+
+output = model.generate(**inputs, max_new_tokens=128)
+print(processor.tokenizer.decode(output[0], skip_special_tokens=True))
+
+Notes
+
+The real dataset is not included due to size restrictions. Replace data/samples/ with your own dataset (e.g., LLaVA-Instruct-Mix).
+
+Notebook is suitable for teaching / assignment-scale experiments.
+
+DDP.py is intended for scalable fine-tuning with multiple GPUs.
+
+Author
+
+Yihang Song
+Master of IT (Data Science), UNSW
+
 
