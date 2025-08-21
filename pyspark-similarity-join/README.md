@@ -24,12 +24,12 @@ pip install -r requirements.txt
 
 # 2. Run with Spark (example: τ = 0.5)
 spark-submit project3.py data/sample.csv output 0.5
-
 ```
 **Result:** Spark writes text files under `output/` (e.g., `part-00000...txt`) with lines like:
+```
 (1,3):0.75
 (2,3):0.75
-
+```
 ## Technical Highlights
 - **Algorithm**: Jaccard similarity + prefix filtering
 - **Optimizations**: broadcast item ordering, Kryo serialization, caching, partitioning
