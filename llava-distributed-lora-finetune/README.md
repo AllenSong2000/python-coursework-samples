@@ -11,6 +11,7 @@ It includes both a Jupyter Notebook for step-by-step exploration and a distribut
 - **Evaluation**: simple inference examples and hooks for VQA-style assessment.
 
 ## Project Structure
+```
 notebook/
 └─ LLaVA_notebook.ipynb # Step-by-step prototype fine-tuning
 scripts/
@@ -18,7 +19,7 @@ scripts/
 data/
 └─ samples/ # Placeholder for images/annotations
 outputs/ # Checkpoints and logs (not included in repo)
-
+```
 
 
 ## Quick Start
