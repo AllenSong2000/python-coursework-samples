@@ -30,7 +30,7 @@ pip install -r requirements.txt
 Open notebook/LLaVA_notebook.ipynb in JupyterLab / Colab to try fine-tuning on a small sample.
 
 3) Multi-GPU training with DDP
-torchrun --nproc_per_node=4 scripts/DDP.py --config configs/train_lora.yaml
+torchrun --nproc_per_node=4 scripts/DDP.py
 Adjust --nproc_per_node based on your available GPUs.
 
 4) Inference
