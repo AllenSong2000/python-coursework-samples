@@ -20,22 +20,26 @@ data/
 outputs/ # Checkpoints and logs (not included in repo)
 
 
+
 ## Quick Start
 
 ### 1) Install dependencies
 ```bash
 pip install -r requirements.txt
-2) Run the notebook
+```
+### 2) Run the notebook
 
 Open notebook/LLaVA_notebook.ipynb in JupyterLab / Colab to try fine-tuning on a small sample.
 
-3) Multi-GPU training with DDP
+### 3) Multi-GPU training with DDP
 torchrun --nproc_per_node=4 scripts/DDP.py
-Adjust --nproc_per_node based on your available GPUs.
 
-4) Inference
+Adjust --nproc_per_node based on your available GPUs.
+(Training hyperparameters are defined directly inside DDP.py for simplicity — no extra config file required.)
+## 4) Inference
 
 After training, load the adapter and run:
+```
 from transformers import AutoModelForCausalLM, AutoProcessor
 from PIL import Image
 
@@ -47,8 +51,8 @@ inputs = processor(text="Describe the image briefly.", images=image, return_tens
 
 output = model.generate(**inputs, max_new_tokens=128)
 print(processor.tokenizer.decode(output[0], skip_special_tokens=True))
-
-Notes
+```
+## Notes
 
 The real dataset is not included due to size restrictions. Replace data/samples/ with your own dataset (e.g., LLaVA-Instruct-Mix).
 
@@ -56,7 +60,7 @@ Notebook is suitable for teaching / assignment-scale experiments.
 
 DDP.py is intended for scalable fine-tuning with multiple GPUs.
 
-Author
+## Author
 
 Yihang Song
 Master of IT (Data Science), UNSW
