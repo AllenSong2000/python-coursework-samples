@@ -1,5 +1,3 @@
-<img width="593" height="533" alt="1755750366781" src="https://github.com/user-attachments/assets/7a08ce73-61f3-437d-89f1-df5c7ff8da05" /># PySpark Transaction Similarity Join
-
 This project implements a **similarity join** over e-commerce transaction logs using **Jaccard similarity** and **prefix filtering** in **PySpark**.  
 The goal is to find all transaction pairs with similarity ≥ τ (tau).
 
